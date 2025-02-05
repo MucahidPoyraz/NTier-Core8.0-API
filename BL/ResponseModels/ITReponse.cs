@@ -1,4 +1,6 @@
-﻿namespace BL.ResponseModels
+﻿using Common.Enums;
+
+namespace BL.ResponseModels
 {
     public interface ITResponse<T> : IResponse
     {

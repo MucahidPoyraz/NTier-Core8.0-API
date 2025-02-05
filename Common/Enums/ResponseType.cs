@@ -1,4 +1,4 @@
-﻿namespace BL.ResponseModels
+﻿namespace Common.Enums
 {
     public enum ResponseType
     {

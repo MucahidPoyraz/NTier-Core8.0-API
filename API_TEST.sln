@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI", "UI\UI.csproj", "{8812
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTOs", "DTOs\DTOs.csproj", "{EC1B10DB-C6E8-4167-8F40-E9C88B97F322}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{451F9CCC-CE2A-4E21-B6FB-0F94E4F9E52A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{EC1B10DB-C6E8-4167-8F40-E9C88B97F322}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC1B10DB-C6E8-4167-8F40-E9C88B97F322}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC1B10DB-C6E8-4167-8F40-E9C88B97F322}.Release|Any CPU.Build.0 = Release|Any CPU
+		{451F9CCC-CE2A-4E21-B6FB-0F94E4F9E52A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{451F9CCC-CE2A-4E21-B6FB-0F94E4F9E52A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{451F9CCC-CE2A-4E21-B6FB-0F94E4F9E52A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{451F9CCC-CE2A-4E21-B6FB-0F94E4F9E52A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

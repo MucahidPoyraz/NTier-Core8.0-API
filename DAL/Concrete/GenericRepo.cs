@@ -1,4 +1,5 @@
-﻿using DAL.Abstract;
+﻿using Common.Enums;
+using DAL.Abstract;
 using DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -15,12 +16,13 @@ namespace DAL.Concrete
             _dbSet = context.Set<T>();
         }
 
-        public async Task AddAsync(T entity)
+        public async Task<T> AddAsync(T entity)
         {
             try
             {
                 await _dbSet.AddAsync(entity);
                 await _context.SaveChangesAsync();
+                return entity;
             }
             catch (Exception ex)
             {
@@ -78,6 +80,31 @@ namespace DAL.Concrete
             }
         }
 
+        public async Task<List<T>> GetAllAsync(OrderType orderType, Expression<Func<T, bool>> predicate = null, params Expression<Func<T, object>>[] includeProperties)
+        {
+            try
+            {
+                IQueryable<T> query = _dbSet;
+                if (predicate != null)
+                {
+                    query = query.Where(predicate);
+                }
+                if (includeProperties != null)
+                {
+                    query = includeProperties.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
+                }
+
+                query = orderType == OrderType.ASC ? query.Order() : query.OrderDescending();
+
+                return await query.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                // Hata günlüğe kaydedilebilir veya özel bir hata yönetimi yapılabilir.
+                throw new Exception("An error occurred while retrieving all entities.", ex);
+            }
+        }
+
         public async Task<T> GetAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties)
         {
             try
@@ -88,6 +115,26 @@ namespace DAL.Concrete
                 {
                     query = includeProperties.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
                 }
+                return await query.FirstOrDefaultAsync();
+            }
+            catch (Exception ex)
+            {
+                // Hata günlüğe kaydedilebilir veya özel bir hata yönetimi yapılabilir.
+                throw new Exception("An error occurred while retrieving the entity.", ex);
+            }
+        }
+
+        public async Task<T> GetAsync(OrderType orderType, Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties)
+        {
+            try
+            {
+                IQueryable<T> query = _dbSet;
+                query = query.Where(predicate);
+                if (includeProperties != null)
+                {
+                    query = includeProperties.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
+                }
+                query = orderType == OrderType.ASC ? query.Order() : query.OrderDescending();
                 return await query.FirstOrDefaultAsync();
             }
             catch (Exception ex)
