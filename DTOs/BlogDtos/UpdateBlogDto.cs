@@ -1,6 +1,4 @@
-﻿using DTOs.CategoryDtos;
-
-namespace DTOs.BlogDtos
+﻿namespace DTOs.BlogDtos
 {
     public class UpdateBlogDto
     {
@@ -9,6 +7,5 @@ namespace DTOs.BlogDtos
         public string Content { get; set; }
         public string Image { get; set; }
         public int CategoryId { get; set; }
-        public CategoryDto Category { get; set; }
     }
 }

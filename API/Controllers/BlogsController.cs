@@ -57,7 +57,7 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var response = await _blogManager.GetByGuidAsync(id);
+            var response = await _blogManager.GetAllAsync(x=>x.Id == id);
             if (response.ResponseType != ResponseType.Success)
                 return NotFound("Blog bulunamadı.");
 
@@ -94,13 +94,22 @@ namespace API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var response = await _blogManager.DeleteAsync(id);
-            if (response.ResponseType == ResponseType.NotFound)
-                return NotFound("Blog bulunamadı.");
-            if (response.ResponseType != ResponseType.Success)
-                return BadRequest(response.Message);
+            var deleteEntity = await _blogManager.GetAsync(x=>x.Id == id);
+            if (deleteEntity.ResponseType == ResponseType.Success)
+            {
+                var response = await _blogManager.DeleteAsync(deleteEntity.Data);
+                if (response.ResponseType == ResponseType.NotFound)
+                    return NotFound("Blog bulunamadı.");
+                if (response.ResponseType != ResponseType.Success)
+                    return BadRequest(response.Message);
 
-            return Ok("Blog başarıyla silindi.");
+                return Ok("Blog başarıyla silindi.");
+            }
+            else
+            {
+                return BadRequest(deleteEntity.Message);
+            }
+           
         }
 
         // 📌 IncludeProperty'leri Expression'a Çeviren Yardımcı Metot

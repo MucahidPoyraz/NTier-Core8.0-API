@@ -1,15 +1,15 @@
-﻿using Common.Enums;
-using DAL.Abstract;
+﻿using DAL.Abstract;
 using DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace DAL.Concrete
 {
-    public class GenericRepo<T> : IGenericRepo<T> where T : class, IEquatable<T>
+    public class GenericRepo<T> : IGenericRepo<T> where T : class
     {
         private readonly ApiContext _context;
         private readonly DbSet<T> _dbSet;
+
         public GenericRepo(ApiContext context)
         {
             _context = context;
@@ -18,172 +18,61 @@ namespace DAL.Concrete
 
         public async Task<T> AddAsync(T entity)
         {
-            try
-            {
-                await _dbSet.AddAsync(entity);
-                await _context.SaveChangesAsync();
-                return entity;
-            }
-            catch (Exception ex)
-            {
-                // Hata günlüğe kaydedilebilir veya özel bir hata yönetimi yapılabilir.
-                throw new Exception("An error occurred while adding the entity.", ex);
-            }
+            await _dbSet.AddAsync(entity);
+            await _context.SaveChangesAsync();
+            return entity;
         }
 
         public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
         {
-            try
-            {
-                return await _dbSet.AnyAsync(predicate);
-            }
-            catch (Exception ex)
-            {
-                // Hata günlüğe kaydedilebilir veya özel bir hata yönetimi yapılabilir.
-                throw new Exception("An error occurred while checking the existence of the entity.", ex);
-            }
+            return await _dbSet.AnyAsync(predicate);
         }
 
         public async Task DeleteAsync(T entity)
         {
-            try
-            {
-                _dbSet.Remove(entity);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                // Hata günlüğe kaydedilebilir veya özel bir hata yönetimi yapılabilir.
-                throw new Exception("An error occurred while deleting the entity.", ex);
-            }
+            _dbSet.Remove(entity);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>> predicate = null, params Expression<Func<T, object>>[] includeProperties)
         {
-            try
-            {
-                IQueryable<T> query = _dbSet;
-                if (predicate != null)
-                {
-                    query = query.Where(predicate);
-                }
-                if (includeProperties != null)
-                {
-                    query = includeProperties.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
-                }
-                return await query.ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                // Hata günlüğe kaydedilebilir veya özel bir hata yönetimi yapılabilir.
-                throw new Exception("An error occurred while retrieving all entities.", ex);
-            }
+            IQueryable<T> query = _dbSet;
+
+            if (predicate != null)
+                query = query.Where(predicate);
+
+            query = includeProperties.Aggregate(query, (current, include) => current.Include(include));
+
+            return await query.ToListAsync();
         }
 
-        public async Task<List<T>> GetAllAsync(OrderType orderType, Expression<Func<T, bool>> predicate = null, params Expression<Func<T, object>>[] includeProperties)
+        public async Task<List<T>> GetAllAsync(Expression<Func<T, object>> orderBy, bool ascending = true, Expression<Func<T, bool>> predicate = null, params Expression<Func<T, object>>[] includeProperties)
         {
-            try
-            {
-                IQueryable<T> query = _dbSet;
-                if (predicate != null)
-                {
-                    query = query.Where(predicate);
-                }
-                if (includeProperties != null)
-                {
-                    query = includeProperties.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
-                }
+            IQueryable<T> query = _dbSet;
 
-                query = orderType == OrderType.ASC ? query.Order() : query.OrderDescending();
+            if (predicate != null)
+                query = query.Where(predicate);
 
-                return await query.ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                // Hata günlüğe kaydedilebilir veya özel bir hata yönetimi yapılabilir.
-                throw new Exception("An error occurred while retrieving all entities.", ex);
-            }
+            query = includeProperties.Aggregate(query, (current, include) => current.Include(include));
+
+            query = ascending ? query.OrderBy(orderBy) : query.OrderByDescending(orderBy);
+
+            return await query.ToListAsync();
         }
 
         public async Task<T> GetAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties)
         {
-            try
-            {
-                IQueryable<T> query = _dbSet;
-                query = query.Where(predicate);
-                if (includeProperties != null)
-                {
-                    query = includeProperties.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
-                }
-                return await query.FirstOrDefaultAsync();
-            }
-            catch (Exception ex)
-            {
-                // Hata günlüğe kaydedilebilir veya özel bir hata yönetimi yapılabilir.
-                throw new Exception("An error occurred while retrieving the entity.", ex);
-            }
-        }
+            IQueryable<T> query = _dbSet.Where(predicate);
 
-        public async Task<T> GetAsync(OrderType orderType, Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties)
-        {
-            try
-            {
-                IQueryable<T> query = _dbSet;
-                query = query.Where(predicate);
-                if (includeProperties != null)
-                {
-                    query = includeProperties.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
-                }
-                query = orderType == OrderType.ASC ? query.Order() : query.OrderDescending();
-                return await query.FirstOrDefaultAsync();
-            }
-            catch (Exception ex)
-            {
-                // Hata günlüğe kaydedilebilir veya özel bir hata yönetimi yapılabilir.
-                throw new Exception("An error occurred while retrieving the entity.", ex);
-            }
-        }
+            query = includeProperties.Aggregate(query, (current, include) => current.Include(include));
 
-        public async Task<T> GetByGuidAsync(object id)
-        {
-            try
-            {
-                return await _dbSet.FindAsync(id);
-            }
-            catch (Exception ex)
-            {
-                // Hata günlüğe kaydedilebilir veya özel bir hata yönetimi yapılabilir.
-                throw new Exception("An error occurred while retrieving the entity by ID.", ex);
-            }
-        }
-
-        public async Task<T> GetByGuidAsync(object id, params Expression<Func<T, object>>[] includeProperties)
-        {
-            try
-            {
-                IQueryable<T> query = _dbSet;
-                query = includeProperties.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
-                return await query.FirstOrDefaultAsync(e => EF.Property<Guid>(e, "Id").Equals(id));
-            }
-            catch (Exception ex)
-            {
-                // Hata günlüğe kaydedilebilir veya özel bir hata yönetimi yapılabilir.
-                throw new Exception("An error occurred while retrieving the entity with included properties.", ex);
-            }
+            return await query.FirstOrDefaultAsync();
         }
 
         public async Task UpdateAsync(T entity)
         {
-            try
-            {
-                _dbSet.Update(entity);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                // Hata günlüğe kaydedilebilir veya özel bir hata yönetimi yapılabilir.
-                throw new Exception("An error occurred while updating the entity.", ex);
-            }
+            _dbSet.Update(entity);
+            await _context.SaveChangesAsync();
         }
     }
 }

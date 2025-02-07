@@ -15,29 +15,23 @@ namespace BL.Concrete
             _repository = repository;
         }
 
+        private static TResponse<TRes> HandleException<TRes>(Exception ex) =>
+            new()
+            {
+                Message = $"An error occurred: {ex.Message}",
+                ResponseType = ResponseType.Error
+            };
+
         public async Task<ITResponse<T>> AddAsync(T entity)
         {
             try
             {
-                await _repository.AddAsync(entity);
-                return new TResponse<T>
-                {
-                    Message = "Entity added successfully.",
-                    ResponseType = ResponseType.Success,
-                    Data = entity
-                };
+                var addedEntity = await _repository.AddAsync(entity);
+                return new TResponse<T> { Message = "Entity added successfully.", ResponseType = ResponseType.Success, Data = addedEntity };
             }
             catch (Exception ex)
             {
-                return new TResponse<T>
-                {
-                    Message = $"An error occurred: {ex.Message}",
-                    ResponseType = ResponseType.Error,
-                    ValidationError = new List<CustomValidatonError>
-                    {
-                        new CustomValidatonError { ErrorMessage = ex.Message }
-                    }
-                };
+                return HandleException<T>(ex);
             }
         }
 
@@ -45,207 +39,48 @@ namespace BL.Concrete
         {
             try
             {
-                bool exists = await _repository.AnyAsync(predicate);
-                return new TResponse<bool>
-                {
-                    Message = "Existence check completed successfully.",
-                    ResponseType = ResponseType.Success,
-                    Data = exists
-                };
+                return new TResponse<bool> { Message = "Existence check completed.", ResponseType = ResponseType.Success, Data = await _repository.AnyAsync(predicate) };
             }
             catch (Exception ex)
             {
-                return new TResponse<bool>
-                {
-                    Message = $"An error occurred: {ex.Message}",
-                    ResponseType = ResponseType.Error,
-                    ValidationError = new List<CustomValidatonError>
-                    {
-                        new CustomValidatonError { ErrorMessage = ex.Message }
-                    }
-                };
+                return HandleException<bool>(ex);
             }
         }
 
-        public async Task<IResponse> DeleteAsync(object id)
+        public async Task<IResponse> DeleteAsync(T entity)
         {
             try
             {
-                T entity = await _repository.GetByGuidAsync(id);
                 await _repository.DeleteAsync(entity);
-                return new TResponse<T>
-                {
-                    Message = "Entity deleted successfully.",
-                    ResponseType = ResponseType.Success
-                };
+                return new TResponse<T> { Message = "Entity deleted successfully.", ResponseType = ResponseType.Success };
             }
             catch (Exception ex)
             {
-                return new TResponse<T>
-                {
-                    Message = $"An error occurred: {ex.Message}",
-                    ResponseType = ResponseType.Error,
-                    ValidationError = new List<CustomValidatonError>
-                    {
-                        new CustomValidatonError { ErrorMessage = ex.Message }
-                    }
-                };
+                return HandleException<T>(ex);
             }
         }
 
-        public async Task<ITResponse<List<T>>> GetAllAsync(Expression<Func<T, bool>> predicate = null, params Expression<Func<T, object>>[] includeProperties)
+        public async Task<ITResponse<List<T>>> GetAllAsync(Expression<Func<T, bool>> predicate = null, params Expression<Func<T, object>>[] includes)
         {
             try
             {
-                var entities = await _repository.GetAllAsync(predicate, includeProperties);
-                return new TResponse<List<T>>
-                {
-                    Message = "Entities retrieved successfully.",
-                    ResponseType = ResponseType.Success,
-                    Data = entities
-                };
+                return new TResponse<List<T>> { Message = "Entities retrieved successfully.", ResponseType = ResponseType.Success, Data = await _repository.GetAllAsync(predicate, includes) };
             }
             catch (Exception ex)
             {
-                return new TResponse<List<T>>
-                {
-                    Message = $"An error occurred: {ex.Message}",
-                    ResponseType = ResponseType.Error,
-                    ValidationError = new List<CustomValidatonError>
-                    {
-                        new CustomValidatonError { ErrorMessage = ex.Message }
-                    }
-                };
+                return HandleException<List<T>>(ex);
             }
-        }
+        }       
 
-        public async Task<ITResponse<List<T>>> GetAllAsync(OrderType orderType, Expression<Func<T, bool>> predicate = null, params Expression<Func<T, object>>[] includeProperties)
+        public async Task<ITResponse<T>> GetAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
         {
             try
             {
-                var entities = await _repository.GetAllAsync(orderType, predicate, includeProperties);
-                return new TResponse<List<T>>
-                {
-                    Message = "Entities retrieved successfully.",
-                    ResponseType = ResponseType.Success,
-                    Data = entities
-                };
+                return new TResponse<T> { Message = "Entity retrieved successfully.", ResponseType = ResponseType.Success, Data = await _repository.GetAsync(predicate, includes) };
             }
             catch (Exception ex)
             {
-                return new TResponse<List<T>>
-                {
-                    Message = $"An error occurred: {ex.Message}",
-                    ResponseType = ResponseType.Error,
-                    ValidationError = new List<CustomValidatonError>
-                    {
-                        new CustomValidatonError { ErrorMessage = ex.Message }
-                    }
-                };
-            }
-        }
-
-        public async Task<ITResponse<T>> GetAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties)
-        {
-            try
-            {
-                var entity = await _repository.GetAsync(predicate, includeProperties);
-                return new TResponse<T>
-                {
-                    Message = "Entity retrieved successfully.",
-                    ResponseType = ResponseType.Success,
-                    Data = entity
-                };
-            }
-            catch (Exception ex)
-            {
-                return new TResponse<T>
-                {
-                    Message = $"An error occurred: {ex.Message}",
-                    ResponseType = ResponseType.Error,
-                    ValidationError = new List<CustomValidatonError>
-                    {
-                        new CustomValidatonError { ErrorMessage = ex.Message }
-                    }
-                };
-            }
-        }
-
-        public async Task<ITResponse<T>> GetAsync(OrderType orderType, Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties)
-        {
-            try
-            {
-                var entity = await _repository.GetAsync(orderType, predicate, includeProperties);
-                return new TResponse<T>
-                {
-                    Message = "Entity retrieved successfully.",
-                    ResponseType = ResponseType.Success,
-                    Data = entity
-                };
-            }
-            catch (Exception ex)
-            {
-                return new TResponse<T>
-                {
-                    Message = $"An error occurred: {ex.Message}",
-                    ResponseType = ResponseType.Error,
-                    ValidationError = new List<CustomValidatonError>
-                    {
-                        new CustomValidatonError { ErrorMessage = ex.Message }
-                    }
-                };
-            }
-        }
-
-        public async Task<ITResponse<T>> GetByGuidAsync(object id)
-        {
-            try
-            {
-                var entity = await _repository.GetByGuidAsync(id);
-                return new TResponse<T>
-                {
-                    Message = "Entity retrieved successfully.",
-                    ResponseType = ResponseType.Success,
-                    Data = entity
-                };
-            }
-            catch (Exception ex)
-            {
-                return new TResponse<T>
-                {
-                    Message = $"An error occurred: {ex.Message}",
-                    ResponseType = ResponseType.Error,
-                    ValidationError = new List<CustomValidatonError>
-                    {
-                        new CustomValidatonError { ErrorMessage = ex.Message }
-                    }
-                };
-            }
-        }
-
-        public async Task<ITResponse<T>> GetByGuidAsync(object id, params Expression<Func<T, object>>[] includeProperties)
-        {
-            try
-            {
-                var entity = await _repository.GetByGuidAsync(id, includeProperties);
-                return new TResponse<T>
-                {
-                    Message = "Entity retrieved successfully.",
-                    ResponseType = ResponseType.Success,
-                    Data = entity
-                };
-            }
-            catch (Exception ex)
-            {
-                return new TResponse<T>
-                {
-                    Message = $"An error occurred: {ex.Message}",
-                    ResponseType = ResponseType.Error,
-                    ValidationError = new List<CustomValidatonError>
-                    {
-                        new CustomValidatonError { ErrorMessage = ex.Message }
-                    }
-                };
+                return HandleException<T>(ex);
             }
         }
 
@@ -254,24 +89,11 @@ namespace BL.Concrete
             try
             {
                 await _repository.UpdateAsync(entity);
-                return new TResponse<T>
-                {
-                    Message = "Entity updated successfully.",
-                    ResponseType = ResponseType.Success,
-                    Data = entity
-                };
+                return new TResponse<T> { Message = "Entity updated successfully.", ResponseType = ResponseType.Success, Data = entity };
             }
             catch (Exception ex)
             {
-                return new TResponse<T>
-                {
-                    Message = $"An error occurred: {ex.Message}",
-                    ResponseType = ResponseType.Error,
-                    ValidationError = new List<CustomValidatonError>
-                    {
-                        new CustomValidatonError { ErrorMessage = ex.Message }
-                    }
-                };
+                return HandleException<T>(ex);
             }
         }
     }

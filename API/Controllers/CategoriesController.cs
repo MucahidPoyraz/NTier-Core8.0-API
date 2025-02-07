@@ -25,16 +25,14 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] string? filter, [FromQuery] string[]? includeProperties)
         {
-            // ✅ Predicate Oluştur (Filtreleme)
-            Expression<Func<Category, bool>> predicate = !string.IsNullOrEmpty(filter) ? c => c.Name.Contains(filter) : null;
+            Expression<Func<Category, bool>> predicate =
+                !string.IsNullOrEmpty(filter) ? c => c.Name.Contains(filter) : null;
 
-            // ✅ Include Properties'i Dinamik Olarak İşle
             var includeExpressions = includeProperties?
                 .Select(CreateIncludeExpression)
                 .Where(expression => expression != null)
                 .ToArray();
 
-            // ✅ Veriyi Servisten Çek
             var response = await _categoryManager.GetAllAsync(predicate, includeExpressions);
             if (response.ResponseType != ResponseType.Success) return BadRequest(response.Message);
 
@@ -43,16 +41,17 @@ namespace API.Controllers
 
         // ✅ ID'ye Göre Kategori Getir (Include Destekli)
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id, [FromQuery] string[] includeParams)
+        public async Task<IActionResult> GetById(int id, [FromQuery] string[]? includeParams)
         {
+            if (id <= 0) return BadRequest("Geçersiz kategori ID.");
+
             var includeExpressions = includeParams?
                 .Select(CreateIncludeExpression)
                 .Where(expression => expression != null)
                 .ToArray();
 
-            var response = await _categoryManager.GetByGuidAsync(id, includeExpressions);
-            if (response.ResponseType != ResponseType.Success) return BadRequest(response.Message);
-            if (response.Data == null) return NotFound("Kategori bulunamadı.");
+            var response = await _categoryManager.GetAsync(x=>x.Id == id, includeExpressions);
+            if (response.ResponseType == ResponseType.NotFound) return NotFound("Kategori bulunamadı.");
 
             return Ok(_mapper.Map<CategoryDto>(response.Data));
         }
@@ -68,7 +67,8 @@ namespace API.Controllers
 
             if (response.ResponseType != ResponseType.Success) return BadRequest(response.Message);
 
-            return CreatedAtAction(nameof(GetById), new { id = response.Data.Id }, response.Data);
+            var categoryDto = _mapper.Map<CategoryDto>(response.Data);
+            return CreatedAtAction(nameof(GetById), new { id = categoryDto.Id }, categoryDto);
         }
 
         // ✅ Kategori Güncelle
@@ -82,25 +82,32 @@ namespace API.Controllers
             var response = await _categoryManager.UpdateAsync(category);
             if (response.ResponseType != ResponseType.Success) return BadRequest(response.Message);
 
-            return Ok(dto);
+            return NoContent();
         }
 
         // ✅ Kategori Sil
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var response = await _categoryManager.DeleteAsync(id);
-            if (response.ResponseType == ResponseType.NotFound) return NotFound("Kategori bulunamadı.");
-            if (response.ResponseType != ResponseType.Success) return BadRequest(response.Message);
-
-            return Ok("Kategori başarıyla silindi.");
+            if (id <= 0) return BadRequest("Geçersiz kategori ID.");
+            var deleteEntity = await _categoryManager.GetAsync(x=>x.Id == id);
+            if (deleteEntity.ResponseType == ResponseType.Success)
+            {
+                var response = await _categoryManager.DeleteAsync(deleteEntity.Data);
+                if (response.ResponseType == ResponseType.NotFound) return NotFound("Kategori bulunamadı.");
+                return Ok("Kategori başarıyla silindi.");
+            }
+            else
+            {
+                return NotFound("Kategori bulunamadı.");
+            }     
         }
 
         // ✅ Kategori Var mı? (Filtre ile)
         [HttpGet("any")]
         public async Task<IActionResult> Any([FromQuery] string name)
         {
-            if (string.IsNullOrEmpty(name)) return BadRequest("Name parameter is required.");
+            if (string.IsNullOrEmpty(name)) return BadRequest("Kategori adı zorunludur.");
 
             Expression<Func<Category, bool>> predicate = c => c.Name == name;
             var response = await _categoryManager.AnyAsync(predicate);
@@ -118,8 +125,9 @@ namespace API.Controllers
                 var property = Expression.PropertyOrField(parameter, propertyName);
                 return Expression.Lambda<Func<Category, object>>(Expression.Convert(property, typeof(object)), parameter);
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine($"Invalid property: {propertyName}, Error: {ex.Message}");
                 return null;
             }
         }

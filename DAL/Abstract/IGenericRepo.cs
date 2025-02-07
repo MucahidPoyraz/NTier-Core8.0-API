@@ -1,19 +1,25 @@
-﻿using Common.Enums;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 
 namespace DAL.Abstract
 {
     public interface IGenericRepo<T>
     {
+        // Ekleme
         Task<T> AddAsync(T entity);
-        Task<List<T>> GetAllAsync(Expression<Func<T, bool>> predicate = null, params Expression<Func<T, object>>[] includeProperties);
-        Task<List<T>> GetAllAsync(OrderType orderType, Expression<Func<T, bool>> predicate = null, params Expression<Func<T, object>>[] includeProperties);
-        Task<T> GetAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);
-        Task<T> GetAsync(OrderType orderType, Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);
-        Task<T> GetByGuidAsync(object id);
-        Task<T> GetByGuidAsync(object id, params Expression<Func<T, object>>[] includeProperties);
+
+        // Güncelleme
         Task UpdateAsync(T entity);
+
+        // Silme
         Task DeleteAsync(T entity);
+
+        // Listeleme
+        Task<List<T>> GetAllAsync(Expression<Func<T, bool>> predicate = null, params Expression<Func<T, object>>[] includeProperties);
+
+        // Tekil Kayıt Getirme
+        Task<T> GetAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);
+
+        // Varlık Kontrolü
         Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
     }
 }
