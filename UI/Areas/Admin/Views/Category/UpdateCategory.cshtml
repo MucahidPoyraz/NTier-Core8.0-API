@@ -1,0 +1,36 @@
+﻿@model UpdateCategoryModel
+<div class="row">
+    <!-- left column -->
+    <div class="col-md-12">
+        <!-- jquery validation -->
+        <div class="card card-primary mt-5">
+            <div class="card-header d-flex justify-content-center">
+                <h3 class="card-title ">KATEGORİ GÜNCELLEME SAYFASI</h3>
+            </div>
+            <!-- /.card-header -->
+            <!-- form start -->
+            <form asp-area="Admin" asp-controller="Category" asp-action="UpdateCategory" class="form-horizontal" id="quickForm" novalidate="novalidate">
+                <div class="card-body">
+                    <input asp-for="Id" type="text" hidden>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Kategori Adı</label>
+                        <div class="col-sm-10">
+                            <input asp-for="Name" type="text" class="form-control" placeholder="Kategori Adı">
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer d-flex justify-content-center">
+                    <button type="submit" class="btn btn-success col fileinput-button dz-clickable">Kaydet</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.card -->
+    </div>
+    <!--/.col (left) -->
+    <!-- right column -->
+    <div class="col-md-6">
+    </div>
+    <!--/.col (right) -->
+</div>

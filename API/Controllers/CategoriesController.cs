@@ -23,10 +23,14 @@ namespace API.Controllers
 
         // ✅ Tüm Kategorileri Getir
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] string? filter, [FromQuery] string[]? includeProperties)
+        public async Task<IActionResult> GetAll(
+            [FromQuery] int? id,
+            [FromQuery] string? name,
+            [FromQuery] string[]? includeProperties)
         {
-            Expression<Func<Category, bool>> predicate =
-                !string.IsNullOrEmpty(filter) ? c => c.Name.Contains(filter) : null;
+            Expression<Func<Category, bool>> predicate = c =>
+                (!id.HasValue || c.Id == id.Value) &&
+                (string.IsNullOrEmpty(name) || c.Name.Contains(name));
 
             var includeExpressions = includeProperties?
                 .Select(CreateIncludeExpression)
@@ -34,10 +38,13 @@ namespace API.Controllers
                 .ToArray();
 
             var response = await _categoryManager.GetAllAsync(predicate, includeExpressions);
-            if (response.ResponseType != ResponseType.Success) return BadRequest(response.Message);
+
+            if (response.ResponseType != ResponseType.Success)
+                return BadRequest(response.Message);
 
             return Ok(_mapper.Map<List<CategoryDto>>(response.Data));
         }
+
 
         // ✅ ID'ye Göre Kategori Getir (Include Destekli)
         [HttpGet("{id}")]
@@ -50,7 +57,7 @@ namespace API.Controllers
                 .Where(expression => expression != null)
                 .ToArray();
 
-            var response = await _categoryManager.GetAsync(x=>x.Id == id, includeExpressions);
+            var response = await _categoryManager.GetAsync(x => x.Id == id, includeExpressions);
             if (response.ResponseType == ResponseType.NotFound) return NotFound("Kategori bulunamadı.");
 
             return Ok(_mapper.Map<CategoryDto>(response.Data));
@@ -90,7 +97,7 @@ namespace API.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             if (id <= 0) return BadRequest("Geçersiz kategori ID.");
-            var deleteEntity = await _categoryManager.GetAsync(x=>x.Id == id);
+            var deleteEntity = await _categoryManager.GetAsync(x => x.Id == id);
             if (deleteEntity.ResponseType == ResponseType.Success)
             {
                 var response = await _categoryManager.DeleteAsync(deleteEntity.Data);
@@ -100,7 +107,7 @@ namespace API.Controllers
             else
             {
                 return NotFound("Kategori bulunamadı.");
-            }     
+            }
         }
 
         // ✅ Kategori Var mı? (Filtre ile)
