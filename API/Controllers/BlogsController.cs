@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using BL.Abstract;
 using Common.Enums;
+using Common.Models;
 using DTOs.BlogDtos;
 using Entity;
 using Microsoft.AspNetCore.Mvc;
@@ -27,37 +27,38 @@ namespace API.Controllers
             [FromQuery] int? categoryId,
             [FromQuery] DateTime? createdAfter,
             [FromQuery] string[]? includeProperties,
-            [FromQuery] OrderType? orderType = OrderType.ASC)
+            [FromQuery] OrderType? orderType = OrderType.ASC,
+            [FromQuery] int pageIndex = 1,  // Sayfa indeksini 1 olarak varsayıyoruz
+            [FromQuery] int pageSize = 10   // Sayfa başına 10 eleman varsayıyoruz
+        )
         {
-            // 📌 Dinamik Filtreleme (Predicate)
+            // Dinamik Filtreleme (Predicate)
             Expression<Func<Blog, bool>> predicate = x =>
                 (!id.HasValue || x.Id == id.Value) &&
                 (!categoryId.HasValue || x.CategoryId == categoryId.Value) &&
                 (!createdAfter.HasValue || x.CreatedAt > createdAfter.Value);
 
-            // 📌 IncludeProperty'leri Dinamik Olarak Oluştur
+            // IncludeProperty'leri Dinamik Olarak Oluştur
             var includeExpressions = includeProperties?
                 .Select(CreateIncludeExpression)
                 .Where(expression => expression != null)
                 .ToArray();
 
-            // 📌 Veriyi Getir
-            var response = await _blogManager.GetAllAsync(predicate, includeExpressions);
+            // Veriyi Getir (Sayfalama işlemi ile)
+            var response = await _blogManager.GetPaginatedAsync(
+                pageIndex, pageSize, predicate, x => x.CreatedAt,true, includeExpressions);
+
             if (response.ResponseType != ResponseType.Success)
                 return BadRequest(response.Message);
 
-            // 📌 Sıralama Uygula
-            var sortedData = orderType == OrderType.ASC
-                ? response.Data.OrderBy(x => x.CreatedAt).ToList()
-                : response.Data.OrderByDescending(x => x.CreatedAt).ToList();
-
-            return Ok(sortedData);
+            // Sıralama işlemi: response zaten sıralı gelecek.
+            return Ok(response.Data);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var response = await _blogManager.GetAllAsync(x=>x.Id == id);
+            var response = await _blogManager.GetAllAsync(x => x.Id == id);
             if (response.ResponseType != ResponseType.Success)
                 return NotFound("Blog bulunamadı.");
 
@@ -94,7 +95,7 @@ namespace API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var deleteEntity = await _blogManager.GetAsync(x=>x.Id == id);
+            var deleteEntity = await _blogManager.GetAsync(x => x.Id == id);
             if (deleteEntity.ResponseType == ResponseType.Success)
             {
                 var response = await _blogManager.DeleteAsync(deleteEntity.Data);
@@ -109,10 +110,9 @@ namespace API.Controllers
             {
                 return BadRequest(deleteEntity.Message);
             }
-           
         }
 
-        // 📌 IncludeProperty'leri Expression'a Çeviren Yardımcı Metot
+        // IncludeProperty'leri Expression'a Çeviren Yardımcı Metot
         private static Expression<Func<Blog, object>> CreateIncludeExpression(string propertyName)
         {
             var parameter = Expression.Parameter(typeof(Blog), "b");

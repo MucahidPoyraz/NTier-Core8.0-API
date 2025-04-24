@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
-using BL.Abstract;
 using Common.Enums;
+using Common.Models;
 using DTOs.CategoryDtos;
+using DTOs.PageDtos;
 using Entity;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
@@ -21,12 +22,16 @@ namespace API.Controllers
             _mapper = mapper;
         }
 
-        // ✅ Tüm Kategorileri Getir
+        // ✅ Tüm Kategorileri Getir (Sayfalama ve Sıralama ile)
         [HttpGet]
         public async Task<IActionResult> GetAll(
             [FromQuery] int? id,
             [FromQuery] string? name,
-            [FromQuery] string[]? includeProperties)
+            [FromQuery] string[]? includeProperties,
+            [FromQuery] int pageIndex = 1,  // Sayfa indeksi, varsayılan olarak 1
+            [FromQuery] int pageSize = 10,  // Sayfa başına 10 kategori
+            [FromQuery] OrderType orderType = OrderType.ASC // Varsayılan sıralama: Artan
+        )
         {
             Expression<Func<Category, bool>> predicate = c =>
                 (!id.HasValue || c.Id == id.Value) &&
@@ -37,14 +42,16 @@ namespace API.Controllers
                 .Where(expression => expression != null)
                 .ToArray();
 
-            var response = await _categoryManager.GetAllAsync(predicate, includeExpressions);
+            // Sayfalama işlemi eklenmiş
+            var response = await _categoryManager.GetPaginatedAsync(
+                pageIndex, pageSize, predicate, x => x.Name, orderType == OrderType.ASC, includeExpressions);
 
             if (response.ResponseType != ResponseType.Success)
                 return BadRequest(response.Message);
 
-            return Ok(_mapper.Map<List<CategoryDto>>(response.Data));
+            var categoryDtos = _mapper.Map<PaginatedResponseDto<CategoryDto>>(response.Data);
+            return Ok(new { TotalCount = response.Data.TotalCount, Data = categoryDtos });
         }
-
 
         // ✅ ID'ye Göre Kategori Getir (Include Destekli)
         [HttpGet("{id}")]

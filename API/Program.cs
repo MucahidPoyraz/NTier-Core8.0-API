@@ -5,7 +5,7 @@ using DTOs.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.LoadServiceExtetion();
+builder.Services.LoadServiceExtetion(builder.Configuration);
 builder.Services.LoadDalExtension(builder.Configuration);
 builder.Services.LoadDtosExtensions();
 // Add services to the container.
@@ -26,7 +26,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseAuthorization();
+app.UseAuthentication();  // JWT doðrulamasý
+app.UseAuthorization();   // Authorization (Role bazlý kontrol)
 
 app.MapControllers();
 

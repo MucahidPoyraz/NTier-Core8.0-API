@@ -1,8 +1,7 @@
-﻿using BL.ResponseModels;
-using Common.Models;
+﻿using Common.ResponseModels;
 using System.Linq.Expressions;
 
-namespace BL.Abstract
+namespace Common.Models
 {
     public interface IGenericManager<T>
     {
@@ -17,6 +16,11 @@ namespace BL.Abstract
         Task<ITResponse<int>> CountAsync(Expression<Func<T, bool>> predicate = null);
 
         // Eğer pagination kullanacaksan bu da eklenebilir
-        Task<ITResponse<PaginatedList<T>>> GetPaginatedAsync(int pageIndex, int pageSize, Expression<Func<T, bool>> predicate = null, Expression<Func<T, object>> orderBy = null, bool ascending = true, params Expression<Func<T, object>>[] includes);
+        Task<ITResponse<PaginatedList<T>>> GetPaginatedAsync(int pageIndex,
+            int pageSize,
+            Expression<Func<T, bool>> predicate = null,
+            Expression<Func<T, object>> orderBy = null,
+            bool ascending = true,
+            params Expression<Func<T, object>>[] includes);
     }
 }

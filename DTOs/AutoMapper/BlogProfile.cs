@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
+using Common.Models;
 using DTOs.BlogDtos;
+using DTOs.CategoryDtos;
+using DTOs.PageDtos;
 using Entity;
 
 namespace DTOs.AutoMapper
@@ -11,6 +14,8 @@ namespace DTOs.AutoMapper
             CreateMap<BlogDto, Blog>().ReverseMap();
             CreateMap<CreateBlogDto, Blog>().ReverseMap();
             CreateMap<UpdateBlogDto, Blog>().ReverseMap();
+
+            CreateMap<PaginatedList<Blog>, PaginatedResponseDto<BlogDto>>().ReverseMap();
         }
     }
 }

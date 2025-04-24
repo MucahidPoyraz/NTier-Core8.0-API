@@ -1,4 +1,4 @@
-﻿using DAL.Abstract;
+﻿using Common.Interfaces;
 using DAL.Concrete;
 using DAL.Context;
 
@@ -15,14 +15,14 @@ namespace DAL.UnitOfWork
             _repositories = new Dictionary<Type, object>();
         }
 
-        public IGenericRepo<T> GetGenericRepo<T>() where T : class, IEquatable<T>
+        public IGenericRepository<T> GetGenericRepo<T>() where T : class, IEquatable<T>
         {
             if (_repositories.ContainsKey(typeof(T)))
             {
-                return (IGenericRepo<T>)_repositories[typeof(T)];
+                return (IGenericRepository<T>)_repositories[typeof(T)];
             }
 
-            var repository = new GenericRepo<T>(_context);
+            var repository = new GenericRepository<T>(_context);
             _repositories.Add(typeof(T), repository);
             return repository;
         }
