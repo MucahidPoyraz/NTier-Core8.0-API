@@ -1,8 +1,6 @@
-﻿using Common.Interfaces;
-
-namespace DAL.UnitOfWork
+﻿namespace Common.Interfaces
 {
-    public interface IUow : IAsyncDisposable
+    public interface IUOW : IAsyncDisposable
     {
         IGenericRepository<T> GetGenericRepo<T>() where T : class, IEquatable<T>;
         Task<int> SaveAsync();

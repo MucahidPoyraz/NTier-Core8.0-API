@@ -8,11 +8,18 @@ namespace DAL.Configurations
     {
         public void Configure(EntityTypeBuilder<IdentityUserRole<int>> builder)
         {
-            builder.HasData(new IdentityUserRole<int>
-            {
-                UserId = 1, // admin kullanıcısının ID'si
-                RoleId = 1  // admin rolünün ID'si
-            });
+            builder.HasData(
+                new IdentityUserRole<int>
+                {
+                    UserId = 1, // admin kullanıcısının ID'si
+                    RoleId = 1  // admin rolünün ID'si
+                },
+                new IdentityUserRole<int>
+                {
+                    UserId = 2, // member kullanıcısının ID'si
+                    RoleId = 2  // member rolünün ID'si
+                }
+            );
         }
     }
 }

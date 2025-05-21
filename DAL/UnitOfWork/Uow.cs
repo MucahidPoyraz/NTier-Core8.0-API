@@ -4,7 +4,7 @@ using DAL.Context;
 
 namespace DAL.UnitOfWork
 {
-    public class Uow : IUow
+    public class Uow : IUOW
     {
         private readonly ApiContext _context;
         private readonly Dictionary<Type, object> _repositories;

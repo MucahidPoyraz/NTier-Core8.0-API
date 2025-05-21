@@ -2,7 +2,6 @@
 using Common.Enums;
 using Common.Models;
 using DTOs.CategoryDtos;
-using DTOs.PageDtos;
 using Entity;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
@@ -25,32 +24,35 @@ namespace API.Controllers
         // ✅ Tüm Kategorileri Getir (Sayfalama ve Sıralama ile)
         [HttpGet]
         public async Task<IActionResult> GetAll(
-            [FromQuery] int? id,
-            [FromQuery] string? name,
-            [FromQuery] string[]? includeProperties,
-            [FromQuery] int pageIndex = 1,  // Sayfa indeksi, varsayılan olarak 1
-            [FromQuery] int pageSize = 10,  // Sayfa başına 10 kategori
-            [FromQuery] OrderType orderType = OrderType.ASC // Varsayılan sıralama: Artan
-        )
+             [FromQuery] string? name,
+             [FromQuery] DateTime? createdDate,
+             [FromQuery] string[]? includeProperties,
+             [FromQuery] int pageIndex = 1,
+             [FromQuery] int pageSize = 10,
+             [FromQuery] OrderType orderType = OrderType.ASC
+         )
         {
+            // Dinamik predicate oluşturuluyor
             Expression<Func<Category, bool>> predicate = c =>
-                (!id.HasValue || c.Id == id.Value) &&
-                (string.IsNullOrEmpty(name) || c.Name.Contains(name));
+                (string.IsNullOrEmpty(name) || c.Name.Contains(name)) &&
+                (!createdDate.HasValue || c.CreatedAt > createdDate.Value);
 
+            // Include işlemleri
             var includeExpressions = includeProperties?
                 .Select(CreateIncludeExpression)
                 .Where(expression => expression != null)
                 .ToArray();
 
-            // Sayfalama işlemi eklenmiş
+            // Sıralama Name alanına göre
+            Expression<Func<Category, object>> orderBy = x => x.Name;
+
             var response = await _categoryManager.GetPaginatedAsync(
-                pageIndex, pageSize, predicate, x => x.Name, orderType == OrderType.ASC, includeExpressions);
+                pageIndex, pageSize, predicate, orderBy, orderType == OrderType.ASC, includeExpressions);
 
             if (response.ResponseType != ResponseType.Success)
                 return BadRequest(response.Message);
 
-            var categoryDtos = _mapper.Map<PaginatedResponseDto<CategoryDto>>(response.Data);
-            return Ok(new { TotalCount = response.Data.TotalCount, Data = categoryDtos });
+            return Ok(response.Data);
         }
 
         // ✅ ID'ye Göre Kategori Getir (Include Destekli)

@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class Identityİnit : Migration
+    public partial class Api3Deneme : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -215,17 +217,29 @@ namespace DAL.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 1, null, "Admin", "ADMIN" });
+                values: new object[,]
+                {
+                    { 1, null, "Admin", "ADMIN" },
+                    { 2, null, "Member", "MEMBER" }
+                });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "CreatedDate", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 1, 0, "acdc6e0b-789b-4723-a4fb-e0fc6ea558a3", new DateTime(2025, 4, 24, 11, 9, 53, 328, DateTimeKind.Utc).AddTicks(3868), "admin@admin.com", true, "admin", "admin", false, null, "ADMIN@ADMIN.COM", "ADMIN", "AQAAAAIAAYagAAAAEEKbUZlDdY0vKPNK/prMR6fqtoOumyL9zlHMnPqe9foAaYHHfXyi2WbmxYsqw/G7sA==", null, false, "8ad824be-e729-4b76-8641-434eab773edd", false, "admin" });
+                values: new object[,]
+                {
+                    { 1, 0, "136dd9a8-5708-46e1-9551-d64c35e4bb89", new DateTime(2025, 5, 21, 12, 14, 32, 949, DateTimeKind.Utc).AddTicks(6411), "admin@admin.com", true, "admin", "admin", false, null, "ADMIN@ADMIN.COM", "ADMIN", "AQAAAAIAAYagAAAAEBzLpQUGm5+ZL0M0Rw6zNUjRwj4tttnTJoWwE4t+aItHN5YixI2LKVaCvJHy6lGkog==", null, false, "e5b9dc3b-5886-48de-9641-909819c72c5c", false, "admin" },
+                    { 2, 0, "72f1cda3-af4d-4c3d-8e8d-38c8c28d9636", new DateTime(2025, 5, 21, 12, 14, 33, 22, DateTimeKind.Utc).AddTicks(7147), "member@site.com", true, "member", "user", false, null, "MEMBER@SITE.COM", "MEMBER", "AQAAAAIAAYagAAAAEKFAO0ZZVtpKVjNjmQj1reWojeIId0VKQbSZkCJlKFaIW/4G3ROyTP7njeGVnIBx7w==", null, false, "d5832407-02a3-4655-8c28-fb161b74316d", false, "member" }
+                });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { 1, 1 });
+                values: new object[,]
+                {
+                    { 1, 1 },
+                    { 2, 2 }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

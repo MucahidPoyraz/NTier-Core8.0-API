@@ -66,11 +66,27 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateBlogDto dto)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Create([FromForm] CreateBlogDto dto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
+            // Resim dosyasını al
+            string imageUrl = null;
+            if (dto.Image != null)
+            {
+                // Resmi kaydetmek için bir yol belirleyin
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", dto.Image.FileName) + new Guid();
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await dto.Image.CopyToAsync(stream);
+                }
+                imageUrl = "/images/" + dto.Image.FileName;  // Kaydedilen resmin URL'si
+            }
+
             var blog = _mapper.Map<Blog>(dto);
+            blog.Image = imageUrl;  // Blog nesnesine resim URL'sini ekle
+
             var response = await _blogManager.AddAsync(blog);
             if (response.ResponseType != ResponseType.Success)
                 return BadRequest(response.Message);
@@ -79,18 +95,33 @@ namespace API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateBlogDto dto)
+        public async Task<IActionResult> Update(int id, [FromForm] UpdateBlogDto dto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             if (id != dto.Id) return BadRequest("URL'deki ID ile gövdedeki ID eşleşmiyor.");
 
+            string imageUrl = null;
+            if (dto.Image != null)
+            {
+                // Resmi kaydetmek için bir yol belirleyin
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", dto.Image.FileName) + new Guid();
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await dto.Image.CopyToAsync(stream);
+                }
+                imageUrl = "/images/" + dto.Image.FileName;
+            }
+
             var blog = _mapper.Map<Blog>(dto);
+            blog.Image = imageUrl;  // Blog nesnesine yeni resim URL'sini ekle
+
             var response = await _blogManager.UpdateAsync(blog);
             if (response.ResponseType != ResponseType.Success)
                 return BadRequest(response.Message);
 
             return NoContent();
         }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)

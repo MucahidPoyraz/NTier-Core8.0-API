@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20250424110954_Identityİnit")]
-    partial class Identityİnit
+    [Migration("20250521121433_Api3Deneme")]
+    partial class Api3Deneme
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -60,6 +60,12 @@ namespace DAL.Migrations
                             Id = 1,
                             Name = "Admin",
                             NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Member",
+                            NormalizedName = "MEMBER"
                         });
                 });
 
@@ -146,8 +152,8 @@ namespace DAL.Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "acdc6e0b-789b-4723-a4fb-e0fc6ea558a3",
-                            CreatedDate = new DateTime(2025, 4, 24, 11, 9, 53, 328, DateTimeKind.Utc).AddTicks(3868),
+                            ConcurrencyStamp = "136dd9a8-5708-46e1-9551-d64c35e4bb89",
+                            CreatedDate = new DateTime(2025, 5, 21, 12, 14, 32, 949, DateTimeKind.Utc).AddTicks(6411),
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             FirstName = "admin",
@@ -155,11 +161,30 @@ namespace DAL.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEEKbUZlDdY0vKPNK/prMR6fqtoOumyL9zlHMnPqe9foAaYHHfXyi2WbmxYsqw/G7sA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEBzLpQUGm5+ZL0M0Rw6zNUjRwj4tttnTJoWwE4t+aItHN5YixI2LKVaCvJHy6lGkog==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "8ad824be-e729-4b76-8641-434eab773edd",
+                            SecurityStamp = "e5b9dc3b-5886-48de-9641-909819c72c5c",
                             TwoFactorEnabled = false,
                             UserName = "admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "72f1cda3-af4d-4c3d-8e8d-38c8c28d9636",
+                            CreatedDate = new DateTime(2025, 5, 21, 12, 14, 33, 22, DateTimeKind.Utc).AddTicks(7147),
+                            Email = "member@site.com",
+                            EmailConfirmed = true,
+                            FirstName = "member",
+                            LastName = "user",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "MEMBER@SITE.COM",
+                            NormalizedUserName = "MEMBER",
+                            PasswordHash = "AQAAAAIAAYagAAAAEKFAO0ZZVtpKVjNjmQj1reWojeIId0VKQbSZkCJlKFaIW/4G3ROyTP7njeGVnIBx7w==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "d5832407-02a3-4655-8c28-fb161b74316d",
+                            TwoFactorEnabled = false,
+                            UserName = "member"
                         });
                 });
 
@@ -356,6 +381,11 @@ namespace DAL.Migrations
                         {
                             UserId = 1,
                             RoleId = 1
+                        },
+                        new
+                        {
+                            UserId = 2,
+                            RoleId = 2
                         });
                 });
 

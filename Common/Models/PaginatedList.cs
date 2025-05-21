@@ -1,8 +1,7 @@
 ﻿namespace Common.Models
 {
     public class PaginatedList<T>
-    {
-        public List<T> Items { get; private set; }   // Sayfadaki veriler
+    {       
         public int PageIndex { get; private set; }   // Şu anki sayfa
         public int TotalPages { get; private set; }  // Toplam sayfa sayısı
         public int TotalCount { get; private set; }  // Toplam veri sayısı
@@ -17,5 +16,6 @@
             PageIndex = pageIndex;
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
         }
+        public List<T> Items { get; private set; }   // Sayfadaki veriler
     }
 }

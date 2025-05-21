@@ -30,7 +30,7 @@ namespace DAL.Extensions
             .AddEntityFrameworkStores<ApiContext>() // AppDbContext kullanıldığı varsayılıyor
             .AddDefaultTokenProviders();
 
-            services.AddScoped<IUow, Uow>();
+            services.AddScoped<IUOW, Uow>();
 
             return services;
         }

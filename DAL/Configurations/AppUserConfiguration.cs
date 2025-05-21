@@ -27,7 +27,23 @@ namespace DAL.Configurations
 
             adminUser.PasswordHash = hasher.HashPassword(adminUser, "Admin@123");
 
-            builder.HasData(adminUser);
+            var memberUser = new AppUser
+            {
+                Id = 2,
+                FirstName = "member",
+                LastName = "user",
+                UserName = "member",
+                NormalizedUserName = "MEMBER",
+                Email = "member@site.com",
+                NormalizedEmail = "MEMBER@SITE.COM",
+                EmailConfirmed = true,
+                SecurityStamp = Guid.NewGuid().ToString("D"),
+                ConcurrencyStamp = Guid.NewGuid().ToString("D"),
+            };
+
+            memberUser.PasswordHash = hasher.HashPassword(memberUser, "Member@123");
+
+            builder.HasData(adminUser, memberUser);
         }
     }
 }

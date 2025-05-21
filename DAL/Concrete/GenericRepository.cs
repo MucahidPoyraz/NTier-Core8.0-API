@@ -124,12 +124,12 @@ namespace DAL.Concrete
         }
 
         public async Task<PaginatedList<T>> GetPaginatedAsync(
-    int pageIndex,
-    int pageSize,
-    Expression<Func<T, bool>> predicate = null,
-    Expression<Func<T, object>> orderBy = null,
-    bool ascending = true,
-    params Expression<Func<T, object>>[] includeProperties)
+        int pageIndex,
+        int pageSize,
+        Expression<Func<T, bool>> predicate = null,
+        Expression<Func<T, object>> orderBy = null,
+        bool ascending = true,
+        params Expression<Func<T, object>>[] includeProperties)
         {
             IQueryable<T> query = _dbSet;
 

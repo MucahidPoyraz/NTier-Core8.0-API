@@ -1,0 +1,116 @@
+2025-04-29 22:51:14.7989 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-04-29 22:51:14.8922 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.4.0.3182. Product version: 5.4.0+4d45d445601312040107cbe2ac00e56c4bf4a60b. GlobalAssemblyCache: False
+2025-04-29 22:51:14.9281 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\mchda\source\repos\API_TEST\API\bin\Debug\net8.0\nlog.config
+2025-04-29 22:51:14.9918 Info Configuration initialized.
+2025-04-30 02:09:07.7922 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-04-30 02:09:07.8390 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.4.0.3182. Product version: 5.4.0+4d45d445601312040107cbe2ac00e56c4bf4a60b. GlobalAssemblyCache: False
+2025-04-30 02:09:07.8661 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\mchda\source\repos\API_TEST\API\bin\Debug\net8.0\nlog.config
+2025-04-30 02:09:07.9218 Info Configuration initialized.
+2025-05-21 15:10:25.2644 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-05-21 15:10:25.3093 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.4.0.3182. Product version: 5.4.0+4d45d445601312040107cbe2ac00e56c4bf4a60b. GlobalAssemblyCache: False
+2025-05-21 15:10:25.3093 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\mchda\source\repos\API_TEST\API\bin\Debug\net8.0\nlog.config
+2025-05-21 15:10:25.3362 Info Configuration initialized.
+2025-05-21 15:10:26.7445 Info AppDomain Shutting down. LogFactory closing...
+2025-05-21 15:10:26.7541 Info LogFactory has been closed.
+2025-05-21 15:10:52.9232 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-05-21 15:10:52.9371 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.4.0.3182. Product version: 5.4.0+4d45d445601312040107cbe2ac00e56c4bf4a60b. GlobalAssemblyCache: False
+2025-05-21 15:10:52.9467 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\mchda\source\repos\API_TEST\API\bin\Debug\net8.0\nlog.config
+2025-05-21 15:10:52.9577 Info Configuration initialized.
+2025-05-21 15:10:55.3532 Info AppDomain Shutting down. LogFactory closing...
+2025-05-21 15:10:55.3631 Info LogFactory has been closed.
+2025-05-21 15:11:19.1287 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-05-21 15:11:19.1287 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.4.0.3182. Product version: 5.4.0+4d45d445601312040107cbe2ac00e56c4bf4a60b. GlobalAssemblyCache: False
+2025-05-21 15:11:19.1287 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\mchda\source\repos\API_TEST\API\bin\Debug\net8.0\nlog.config
+2025-05-21 15:11:19.1625 Info Configuration initialized.
+2025-05-21 15:11:30.0667 Info AppDomain Shutting down. LogFactory closing...
+2025-05-21 15:11:30.0822 Info LogFactory has been closed.
+2025-05-21 15:14:31.7487 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-05-21 15:14:31.7644 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.4.0.3182. Product version: 5.4.0+4d45d445601312040107cbe2ac00e56c4bf4a60b. GlobalAssemblyCache: False
+2025-05-21 15:14:31.7787 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\mchda\source\repos\API_TEST\API\bin\Debug\net8.0\nlog.config
+2025-05-21 15:14:31.7787 Info Configuration initialized.
+2025-05-21 15:14:33.8076 Info AppDomain Shutting down. LogFactory closing...
+2025-05-21 15:14:33.8150 Info LogFactory has been closed.
+2025-05-21 15:14:40.2595 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-05-21 15:14:40.2737 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.4.0.3182. Product version: 5.4.0+4d45d445601312040107cbe2ac00e56c4bf4a60b. GlobalAssemblyCache: False
+2025-05-21 15:14:40.2737 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\mchda\source\repos\API_TEST\API\bin\Debug\net8.0\nlog.config
+2025-05-21 15:14:40.2737 Info Configuration initialized.
+2025-05-21 15:14:41.8942 Info AppDomain Shutting down. LogFactory closing...
+2025-05-21 15:14:41.8942 Info LogFactory has been closed.
+2025-05-21 15:15:40.3242 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-05-21 15:15:40.3401 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.4.0.3182. Product version: 5.4.0+4d45d445601312040107cbe2ac00e56c4bf4a60b. GlobalAssemblyCache: False
+2025-05-21 15:15:40.3497 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\mchda\source\repos\API_TEST\API\bin\Debug\net8.0\nlog.config
+2025-05-21 15:15:40.3497 Info Configuration initialized.
+2025-05-21 15:15:48.4695 Info AppDomain Shutting down. LogFactory closing...
+2025-05-21 15:15:48.4850 Info LogFactory has been closed.
+2025-05-21 16:12:03.6763 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-05-21 16:12:03.7528 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.4.0.3182. Product version: 5.4.0+4d45d445601312040107cbe2ac00e56c4bf4a60b. GlobalAssemblyCache: False
+2025-05-21 16:12:03.7796 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\mchda\source\repos\API_TEST\API\bin\Debug\net8.0\nlog.config
+2025-05-21 16:12:03.8092 Info Configuration initialized.
+2025-05-21 16:18:35.6881 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-05-21 16:18:35.7372 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.4.0.3182. Product version: 5.4.0+4d45d445601312040107cbe2ac00e56c4bf4a60b. GlobalAssemblyCache: False
+2025-05-21 16:18:35.7604 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\mchda\source\repos\API_TEST\API\bin\Debug\net8.0\nlog.config
+2025-05-21 16:18:35.7935 Info Configuration initialized.
+2025-05-21 16:21:35.3448 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-05-21 16:21:35.3698 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.4.0.3182. Product version: 5.4.0+4d45d445601312040107cbe2ac00e56c4bf4a60b. GlobalAssemblyCache: False
+2025-05-21 16:21:35.3878 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\mchda\source\repos\API_TEST\API\bin\Debug\net8.0\nlog.config
+2025-05-21 16:21:35.4062 Info Configuration initialized.
+2025-05-21 16:23:48.5407 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-05-21 16:23:48.6011 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.4.0.3182. Product version: 5.4.0+4d45d445601312040107cbe2ac00e56c4bf4a60b. GlobalAssemblyCache: False
+2025-05-21 16:23:48.6477 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\mchda\source\repos\API_TEST\API\bin\Debug\net8.0\nlog.config
+2025-05-21 16:23:48.6733 Info Configuration initialized.
+2025-05-21 17:04:49.0175 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-05-21 17:04:49.0569 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.4.0.3182. Product version: 5.4.0+4d45d445601312040107cbe2ac00e56c4bf4a60b. GlobalAssemblyCache: False
+2025-05-21 17:04:49.0823 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\mchda\source\repos\API_TEST\API\bin\Debug\net8.0\nlog.config
+2025-05-21 17:04:49.1053 Info Configuration initialized.
+2025-05-21 17:08:03.4071 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-05-21 17:08:03.4386 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.4.0.3182. Product version: 5.4.0+4d45d445601312040107cbe2ac00e56c4bf4a60b. GlobalAssemblyCache: False
+2025-05-21 17:08:03.4708 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\mchda\source\repos\API_TEST\API\bin\Debug\net8.0\nlog.config
+2025-05-21 17:08:03.5105 Info Configuration initialized.
+2025-05-21 17:09:55.3932 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-05-21 17:09:55.4180 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.4.0.3182. Product version: 5.4.0+4d45d445601312040107cbe2ac00e56c4bf4a60b. GlobalAssemblyCache: False
+2025-05-21 17:09:55.4321 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\mchda\source\repos\API_TEST\API\bin\Debug\net8.0\nlog.config
+2025-05-21 17:09:55.4594 Info Configuration initialized.
+2025-05-21 17:13:16.8046 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-05-21 17:13:16.8272 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.4.0.3182. Product version: 5.4.0+4d45d445601312040107cbe2ac00e56c4bf4a60b. GlobalAssemblyCache: False
+2025-05-21 17:13:16.8496 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\mchda\source\repos\API_TEST\API\bin\Debug\net8.0\nlog.config
+2025-05-21 17:13:16.8717 Info Configuration initialized.
+2025-05-21 17:18:23.6867 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-05-21 17:18:23.7191 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.4.0.3182. Product version: 5.4.0+4d45d445601312040107cbe2ac00e56c4bf4a60b. GlobalAssemblyCache: False
+2025-05-21 17:18:23.7447 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\mchda\source\repos\API_TEST\API\bin\Debug\net8.0\nlog.config
+2025-05-21 17:18:23.7680 Info Configuration initialized.
+2025-05-21 17:21:21.5840 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-05-21 17:21:21.6231 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.4.0.3182. Product version: 5.4.0+4d45d445601312040107cbe2ac00e56c4bf4a60b. GlobalAssemblyCache: False
+2025-05-21 17:21:21.6456 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\mchda\source\repos\API_TEST\API\bin\Debug\net8.0\nlog.config
+2025-05-21 17:21:21.6727 Info Configuration initialized.
+2025-05-21 17:24:34.4785 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-05-21 17:24:34.5245 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.4.0.3182. Product version: 5.4.0+4d45d445601312040107cbe2ac00e56c4bf4a60b. GlobalAssemblyCache: False
+2025-05-21 17:24:34.5627 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\mchda\source\repos\API_TEST\API\bin\Debug\net8.0\nlog.config
+2025-05-21 17:24:34.6000 Info Configuration initialized.
+2025-05-21 17:25:37.1339 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-05-21 17:25:37.1691 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.4.0.3182. Product version: 5.4.0+4d45d445601312040107cbe2ac00e56c4bf4a60b. GlobalAssemblyCache: False
+2025-05-21 17:25:37.1907 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\mchda\source\repos\API_TEST\API\bin\Debug\net8.0\nlog.config
+2025-05-21 17:25:37.2324 Info Configuration initialized.
+2025-05-21 17:28:57.2925 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-05-21 17:28:57.3319 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.4.0.3182. Product version: 5.4.0+4d45d445601312040107cbe2ac00e56c4bf4a60b. GlobalAssemblyCache: False
+2025-05-21 17:28:57.3517 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\mchda\source\repos\API_TEST\API\bin\Debug\net8.0\nlog.config
+2025-05-21 17:28:57.3757 Info Configuration initialized.
+2025-05-21 17:29:51.2824 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-05-21 17:29:51.3040 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.4.0.3182. Product version: 5.4.0+4d45d445601312040107cbe2ac00e56c4bf4a60b. GlobalAssemblyCache: False
+2025-05-21 17:29:51.3259 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\mchda\source\repos\API_TEST\API\bin\Debug\net8.0\nlog.config
+2025-05-21 17:29:51.3602 Info Configuration initialized.
+2025-05-21 17:30:58.9265 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-05-21 17:30:58.9538 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.4.0.3182. Product version: 5.4.0+4d45d445601312040107cbe2ac00e56c4bf4a60b. GlobalAssemblyCache: False
+2025-05-21 17:30:58.9762 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\mchda\source\repos\API_TEST\API\bin\Debug\net8.0\nlog.config
+2025-05-21 17:30:59.0113 Info Configuration initialized.
+2025-05-21 17:32:10.1219 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-05-21 17:32:10.1450 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.4.0.3182. Product version: 5.4.0+4d45d445601312040107cbe2ac00e56c4bf4a60b. GlobalAssemblyCache: False
+2025-05-21 17:32:10.1631 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\mchda\source\repos\API_TEST\API\bin\Debug\net8.0\nlog.config
+2025-05-21 17:32:10.1810 Info Configuration initialized.
+2025-05-21 20:01:52.1080 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-05-21 20:01:52.1372 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.4.0.3182. Product version: 5.4.0+4d45d445601312040107cbe2ac00e56c4bf4a60b. GlobalAssemblyCache: False
+2025-05-21 20:01:52.1372 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\mchda\source\repos\API_TEST\API\bin\Debug\net8.0\nlog.config
+2025-05-21 20:01:52.1698 Info Configuration initialized.
+2025-05-21 20:07:06.1975 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-05-21 20:07:06.2457 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.4.0.3182. Product version: 5.4.0+4d45d445601312040107cbe2ac00e56c4bf4a60b. GlobalAssemblyCache: False
+2025-05-21 20:07:06.2793 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\mchda\source\repos\API_TEST\API\bin\Debug\net8.0\nlog.config
+2025-05-21 20:07:06.3184 Info Configuration initialized.
