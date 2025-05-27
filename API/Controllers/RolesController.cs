@@ -1,4 +1,5 @@
-﻿using API.Controllers;
+﻿using DTOs.AppRoleDtos;
+using Entity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,23 +7,25 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class RolesController : ControllerBase
+    public class RolesController : BaseController
     {
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<AppRole> _roleManager;
 
-        public RolesController(RoleManager<IdentityRole> roleManager)
+        public RolesController(RoleManager<AppRole> roleManager)
         {
             _roleManager = roleManager;
         }
 
         // ✅ Rol Ekle
         [HttpPost]
-        public async Task<IActionResult> CreateRole([FromBody] string roleName)
+        public async Task<IActionResult> CreateRole([FromBody] CreateAppRoleDto createAppRoleDto)
         {
-            if (string.IsNullOrWhiteSpace(roleName))
+            if (string.IsNullOrWhiteSpace(createAppRoleDto.Name))
                 return BadRequest("Rol adı boş olamaz.");
 
-            var result = await _roleManager.CreateAsync(new IdentityRole(roleName));
+            // Hatalı: new IdentityRole(roleName)
+            // Doğru: new AppRole(roleName)
+            var result = await _roleManager.CreateAsync(new AppRole(createAppRoleDto.Name));
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
 
@@ -39,12 +42,12 @@ namespace API.Controllers
 
         // ✏️ Rol Güncelle (sadece isim)
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateRole(string id, [FromBody] string newName)
+        public async Task<IActionResult> UpdateRole([FromBody] UpdateAppRoleDto updateAppRoleDto)
         {
-            var role = await _roleManager.FindByIdAsync(id);
+            var role = await _roleManager.FindByIdAsync(updateAppRoleDto.Id.ToString());
             if (role == null) return NotFound("Rol bulunamadı.");
 
-            role.Name = newName;
+            role.Name = updateAppRoleDto.Name;
             var result = await _roleManager.UpdateAsync(role);
             if (!result.Succeeded)
                 return BadRequest(result.Errors);

@@ -1,95 +1,137 @@
+Ôªøusing API.Middleware;
 using BL.Extensions;
 using DAL.Context;
 using DAL.Extensions;
 using DTOs.Extensions;
 using Entity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Service katmanlar˝n˝ y¸kl¸yoruz
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("http://localhost:5253")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+// 1Ô∏è‚É£ Katman servislerini y√ºkle
 builder.Services.LoadServiceExtetion(builder.Configuration);
 builder.Services.LoadDalExtension(builder.Configuration);
 builder.Services.LoadDtosExtensions();
 
-// Controller destei
+// 2Ô∏è‚É£ Controller desteƒüi
 builder.Services.AddControllers();
 
-// Connection string
+// 3Ô∏è‚É£ DbContext baƒülantƒ±sƒ±
 builder.Services.AddDbContext<ApiContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Local")));
 
-// Identity ayarlar˝
-builder.Services.AddIdentity<AppUser, AppRole>(options =>
+// 4Ô∏è‚É£ Identity ayarlarƒ±
+builder.Services.AddIdentityCore<AppUser>(options =>
 {
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;
     options.Password.RequireUppercase = true;
     options.Password.RequireNonAlphanumeric = true;
     options.Password.RequiredLength = 8;
-
-    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-    options.Lockout.MaxFailedAccessAttempts = 5;
-    options.Lockout.AllowedForNewUsers = true;
 })
+.AddRoles<AppRole>()
 .AddEntityFrameworkStores<ApiContext>()
 .AddDefaultTokenProviders();
 
-// JWT ayarlar˝
+// 5Ô∏è‚É£ JWT Authentication ayarlarƒ±
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var secretKey = jwtSettings["SecretKey"];
 
-builder.Services.AddAuthentication()
-    .AddJwtBearer("JwtBearer", options =>
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
     {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = jwtSettings["Issuer"],
-            ValidAudience = jwtSettings["Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
-            ClockSkew = TimeSpan.Zero
-        };
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtSettings["Issuer"],
+        ValidAudience = jwtSettings["Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
+        ClockSkew = TimeSpan.Zero
+    };
 
-        options.Events = new Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerEvents
+    // Opsiyonel y√∂nlendirmeler (Swagger'da 401 yerine redirect gibi istenirse)
+    options.Events = new JwtBearerEvents
+    {
+        OnChallenge = context =>
         {
-            OnChallenge = context =>
-            {
-                context.HandleResponse(); // 401 varsay˝lan cevab˝n˝ devre d˝˛˝ b˝rak˝r
-                context.Response.Redirect("/Account/Login");
-                return Task.CompletedTask;
-            },
-            OnForbidden = context =>
-            {
-                context.Response.Redirect("/Account/AccessDenied");
-                return Task.CompletedTask;
-            }
-        };
+            context.HandleResponse();
+            context.Response.StatusCode = 401;
+            return Task.CompletedTask;
+        },
+        OnForbidden = context =>
+        {
+            context.Response.StatusCode = 403;
+            return Task.CompletedTask;
+        }
+    };
+});
+
+// 6Ô∏è‚É£ Swagger + JWT desteƒüi
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Api", Version = "v1" });
+
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "JWT token'ƒ±nƒ±zƒ± 'Bearer <token>' formatƒ±nda girin."
     });
 
-// Swagger
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 
 var app = builder.Build();
 
-// Ortam kontrol¸
+// 7Ô∏è‚É£ Uygulama pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseStaticFiles();
-
-app.UseAuthentication();  // JWT dorulamas˝
-app.UseAuthorization();   // Role bazl˝ kontrol
+app.UseRouting();
+app.UseCors();
+app.UseAuthentication(); // JWT token doƒürulama
+app.UseAuthorization();  // Yetki kontrol√º (roller vs.)
 
 app.MapControllers();
 

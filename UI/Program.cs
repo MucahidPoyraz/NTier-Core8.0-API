@@ -1,30 +1,45 @@
-using Microsoft.AspNetCore.Mvc;
+﻿var builder = WebApplication.CreateBuilder(args);
 
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
+// Razor View'lar için runtime derleme
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 builder.Services.AddHttpClient();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Hata sayfası ayarı
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
 }
+
 app.UseStaticFiles();
-
 app.UseRouting();
-
+app.UseSession();
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "Admin",
-    pattern: "Admin/{controller=Home}/{action=Index}/{id?}",
-    defaults: new { area = "Admin" }
-);
 
-app.MapDefaultControllerRoute();
+// 🟢 Ana URL geldiğinde Web area'ya yönlendir
+app.MapGet("/", context =>
+{
+    context.Response.Redirect("/Web/Home");
+    return Task.CompletedTask;
+});
+
+// Area route
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+// Varsayılan route
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

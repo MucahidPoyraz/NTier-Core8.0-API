@@ -15,7 +15,7 @@ namespace DAL.UnitOfWork
             _repositories = new Dictionary<Type, object>();
         }
 
-        public IGenericRepository<T> GetGenericRepo<T>() where T : class, IEquatable<T>
+        public IGenericRepository<T> GetGenericRepo<T>() where T : class
         {
             if (_repositories.ContainsKey(typeof(T)))
             {

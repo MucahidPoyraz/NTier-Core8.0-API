@@ -23,35 +23,38 @@ namespace API.Controllers
 
         [HttpGet]
         public async Task<IActionResult> GetAll(
-            [FromQuery] int? id,
-            [FromQuery] int? categoryId,
-            [FromQuery] DateTime? createdAfter,
-            [FromQuery] string[]? includeProperties,
-            [FromQuery] OrderType? orderType = OrderType.ASC,
-            [FromQuery] int pageIndex = 1,  // Sayfa indeksini 1 olarak varsayıyoruz
-            [FromQuery] int pageSize = 10   // Sayfa başına 10 eleman varsayıyoruz
-        )
+    [FromQuery] int? id,
+    [FromQuery] int? categoryId,
+    [FromQuery] DateTime? createdAfter,
+    [FromQuery] string[]? includeProperties,
+    [FromQuery] OrderType? orderType = OrderType.ASC, // ASC veya DESC
+    [FromQuery] int pageIndex = 1,
+    [FromQuery] int pageSize = 10
+)
         {
-            // Dinamik Filtreleme (Predicate)
+            // Dinamik filtreleme
             Expression<Func<Blog, bool>> predicate = x =>
                 (!id.HasValue || x.Id == id.Value) &&
                 (!categoryId.HasValue || x.CategoryId == categoryId.Value) &&
                 (!createdAfter.HasValue || x.CreatedAt > createdAfter.Value);
 
-            // IncludeProperty'leri Dinamik Olarak Oluştur
+            // IncludeProperty'leri oluştur
             var includeExpressions = includeProperties?
                 .Select(CreateIncludeExpression)
                 .Where(expression => expression != null)
                 .ToArray();
 
-            // Veriyi Getir (Sayfalama işlemi ile)
+            // Sıralama yönü
+            Expression<Func<Blog, object>> orderBy = x => x.CreatedAt;
+            bool isDescending = orderType == OrderType.DESC;
+
+            // Veri çekme (sıralama ve sayfalama ile)
             var response = await _blogManager.GetPaginatedAsync(
-                pageIndex, pageSize, predicate, x => x.CreatedAt,true, includeExpressions);
+                pageIndex, pageSize, predicate, orderBy, isDescending, includeExpressions);
 
             if (response.ResponseType != ResponseType.Success)
                 return BadRequest(response.Message);
 
-            // Sıralama işlemi: response zaten sıralı gelecek.
             return Ok(response.Data);
         }
 

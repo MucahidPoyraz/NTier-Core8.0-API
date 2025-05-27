@@ -1,0 +1,34 @@
+﻿@{
+    ViewData["Title"] = "Giriş Yap";
+    Layout = "~/Areas/Web/Views/Shared/_Layout.cshtml"; // Mevcut layout dosyana göre güncelle
+}
+@model LoginModel
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <h3 class="card-title text-center mb-4">Giriş Yap</h3>
+
+                @if (ViewBag.Error != null)
+                {
+                    <div class="alert alert-danger">@ViewBag.Error</div>
+                }
+
+                <form asp-area="Web" asp-controller="Account" asp-action="Login" method="post">
+                    <div class="mb-3">
+                        <label class="form-label">Kullancı Adı</label>
+                        <input type="text" name="UserName" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Şifre</label>
+                        <input type="password" name="password" class="form-control" required />
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Giriş Yap</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,122 @@
+﻿@{
+    ViewData["Title"] = "Bloglar";
+    Layout = "~/Areas/Web/Views/Shared/_Layout.cshtml";
+}
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    function loadBlogs(pageIndex = 1) {
+        const categoryId = $('#categoryFilter').val();
+        const order = $('#sortFilter').val();
+        const date = $('#dateFilter').val();
+        const title = $('#titleFilter').val();
+
+        $.ajax({
+            url: 'http://localhost:5117/api/Blogs',
+            type: 'GET',
+            data: {
+                categoryId: categoryId,
+                createdAfter: date,
+                orderType: order,
+                pageIndex: pageIndex,
+                pageSize: 10
+            },
+            success: function (data) {
+                $('#blogContainer').empty();
+                $('#pagination').empty();
+
+                const blogs = data.items;
+                const totalPages = data.totalPages;
+
+                if (!blogs || blogs.length === 0) {
+                    $('#blogContainer').html('<div class="alert alert-warning">Blog bulunamadı.</div>');
+                    return;
+                }
+
+                // Başlığa göre filtreleme (JS tarafında)
+                const filteredBlogs = title
+                    ? blogs.filter(b => b.title.toLowerCase().includes(title.toLowerCase()))
+                    : blogs;
+
+                if (filteredBlogs.length === 0) {
+                    $('#blogContainer').html('<div class="alert alert-info">Başlığa göre eşleşen blog bulunamadı.</div>');
+                    return;
+                }
+
+                filteredBlogs.forEach(blog => {
+                    $('#blogContainer').append(`
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">${blog.title}</h5>
+                                <p class="card-text">${blog.content.substring(0, 150)}...</p>
+                                <p class="card-text"><small class="text-muted">${new Date(blog.createdAt).toLocaleDateString()}</small></p>
+                            </div>
+                        </div>
+                    `);
+                });
+
+                for (let i = 1; i <= totalPages; i++) {
+                    $('#pagination').append(`
+                        <button class="btn btn-sm btn-outline-primary m-1" onclick="loadBlogs(${i})">${i}</button>
+                    `);
+                }
+            },
+            error: function () {
+                $('#blogContainer').html('<div class="alert alert-danger">Bloglar yüklenirken hata oluştu.</div>');
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        loadBlogs();
+
+        $(document).on('change', '#categoryFilter, #sortFilter, #dateFilter', function () {
+            loadBlogs();
+        });
+
+        $(document).on('input', '#titleFilter', function () {
+            loadBlogs();
+        });
+    });
+</script>
+
+<div class="row">
+    <!-- Sol Panel -->
+    <div class="col-md-3">
+        <h5>Filtrele</h5>
+
+        <!-- Kategori Dropdown (ViewComponent ile) -->
+        @await Component.InvokeAsync("CategoryFilter")
+
+        <div class="mb-3 mt-3">
+            <label for="dateFilter" class="form-label">Şu tarihten sonra</label>
+            <input type="date" id="dateFilter" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label for="titleFilter" class="form-label">Başlığa Göre Ara</label>
+            <input type="text" id="titleFilter" class="form-control" placeholder="Blog başlığı..." />
+        </div>
+    </div>
+
+    <!-- Sağ Panel: Blog Listesi -->
+    <div class="col-md-9">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4>Bloglar</h4>
+            <select id="sortFilter" class="form-select w-auto">
+                <option value="ASC">Tarihe Göre Artan</option>
+                <option value="DESC">Tarihe Göre Azalan</option>
+            </select>
+        </div>
+
+        <div id="blogContainer">
+            <!-- Bloglar burada listelenecek -->
+        </div>
+
+        <div id="pagination" class="mt-3">
+            <!-- Sayfalama -->
+        </div>
+    </div>
+</div>

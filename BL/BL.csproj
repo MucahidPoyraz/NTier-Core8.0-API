@@ -7,11 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Abstract\**" />
     <Compile Remove="ResponseModels\**" />
-    <EmbeddedResource Remove="Abstract\**" />
     <EmbeddedResource Remove="ResponseModels\**" />
-    <None Remove="Abstract\**" />
     <None Remove="ResponseModels\**" />
   </ItemGroup>
 

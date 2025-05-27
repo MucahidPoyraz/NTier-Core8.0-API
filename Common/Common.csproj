@@ -6,4 +6,11 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="ResponseModels\BaseResponse.cs" />
+    <Compile Remove="ResponseModels\ErrorResponse{T}.cs" />
+    <Compile Remove="ResponseModels\SuccessResponse{T}.cs" />
+    <Compile Remove="ResponseModels\ValidationErrorResponse.cs" />
+  </ItemGroup>
+
 </Project>
